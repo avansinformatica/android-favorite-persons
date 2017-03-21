@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Favorite Persons</string>
+    <string name="action_favorites">Favorites</string>
+    <string name="action_add_person">Add</string>
+    <string name="toast_person_deleted">Persoon verwijderd</string>
+    <string name="title_activity_favorites">My favorites</string>
+</resources>
