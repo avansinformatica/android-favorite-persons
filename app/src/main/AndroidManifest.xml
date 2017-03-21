@@ -12,23 +12,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name="nl.avans.android.favourites.MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FavoritesActivity"
+        <activity
+            android:name=".activity.FavoritesActivity"
             android:label="@string/title_activity_favorites"
-            android:parentActivityName="nl.avans.android.favourites.MainActivity" >
+            android:parentActivityName=".activity.MainActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="nl.avans.android.favourites.MainActivity" />
-
+                android:value="nl.avans.android.favourites.activity.MainActivity" />
         </activity>
+        <activity android:name=".activity.FavoritesGridViewActivity"></activity>
     </application>
 
 </manifest>

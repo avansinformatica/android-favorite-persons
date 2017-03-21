@@ -1,4 +1,4 @@
-package nl.avans.android.favourites;
+package nl.avans.android.favourites.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +12,11 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+
+import nl.avans.android.favourites.domain.PersonAdapter;
+import nl.avans.android.favourites.R;
+import nl.avans.android.favourites.api.RandomUserTask;
+import nl.avans.android.favourites.domain.Person;
 
 public class MainActivity extends AppCompatActivity implements RandomUserTask.OnRandomUserAvailable,
         View.OnClickListener {
@@ -71,6 +76,10 @@ public class MainActivity extends AppCompatActivity implements RandomUserTask.On
 
         if (id == R.id.action_favorites) {
             Intent intent = new Intent(getApplicationContext(), FavoritesActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.action_favorites_gridview) {
+            Intent intent = new Intent(getApplicationContext(), FavoritesGridViewActivity.class);
             startActivity(intent);
             return true;
         } else if (id == R.id.actionAddPerson) {

@@ -1,4 +1,4 @@
-package nl.avans.android.favourites;
+package nl.avans.android.favourites.domain;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,7 +17,8 @@ import android.widget.Toast;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import static android.R.attr.duration;
+import nl.avans.android.favourites.data.PersonDBHandler;
+import nl.avans.android.favourites.R;
 
 /**
  * Created by dkroeske on 9/16/15.

@@ -1,4 +1,4 @@
-package nl.avans.android.favourites;
+package nl.avans.android.favourites.data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import nl.avans.android.favourites.domain.Person;
 
 /**
  * Created by dkroeske on 9/16/15.

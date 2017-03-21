@@ -1,4 +1,4 @@
-package nl.avans.android.favourites;
+package nl.avans.android.favourites.domain;
 
 /**
  * Created by dkroeske on 9/16/15.

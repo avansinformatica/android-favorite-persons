@@ -1,4 +1,4 @@
-package nl.avans.android.favourites;
+package nl.avans.android.favourites.activity;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +8,11 @@ import android.util.Log;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+
+import nl.avans.android.favourites.domain.PersonAdapter;
+import nl.avans.android.favourites.data.PersonDBHandler;
+import nl.avans.android.favourites.R;
+import nl.avans.android.favourites.domain.Person;
 
 public class FavoritesActivity extends AppCompatActivity {
 

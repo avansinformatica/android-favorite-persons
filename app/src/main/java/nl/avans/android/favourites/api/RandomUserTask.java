@@ -1,4 +1,4 @@
-package nl.avans.android.favourites;
+package nl.avans.android.favourites.api;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -15,6 +15,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+
+import nl.avans.android.favourites.domain.Person;
 
 /**
  * Created by dkroeske on 9/15/15.
