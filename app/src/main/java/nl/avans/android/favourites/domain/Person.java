@@ -14,6 +14,7 @@ public class Person implements Serializable {
     private String fullName;
     private String emailAddress;
     private boolean isFavorite = false;
+    private BSN bsn;
 
     public boolean isFavorite() {
         return isFavorite;
@@ -75,5 +76,7 @@ public class Person implements Serializable {
     public String toString() {
         return title + " " + first + " " + last;
     }
+
+
 
 }

@@ -29,7 +29,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="nl.avans.android.favourites.activity.MainActivity" />
         </activity>
-        <activity android:name=".activity.FavoritesGridViewActivity"></activity>
     </application>
 
 </manifest>

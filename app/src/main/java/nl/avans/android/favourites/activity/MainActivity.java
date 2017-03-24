@@ -122,8 +122,8 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.action_favorites_gridview:
-                intent = new Intent(getApplicationContext(), FavoritesGridViewActivity.class);
-                startActivity(intent);
+//                intent = new Intent(getApplicationContext(), FavoritesGridViewActivity.class);
+//                startActivity(intent);
                 break;
             case R.id.actionAddPerson:
                 RandomUserTask getRandomUser = new RandomUserTask(this);
