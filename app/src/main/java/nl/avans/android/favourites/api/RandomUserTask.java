@@ -125,8 +125,8 @@ public class RandomUserTask extends AsyncTask<String, Void, String>  {
 
                 // Create new Person object
                 Person p = new Person();
-                p.setFirst(firstName);
-                p.setLast(lastName);
+                p.setFirstName(firstName);
+                p.setLastName(lastName);
                 p.setTitle(title);
                 p.setImageUrl(imageurl);
                 p.setEmailAddress(email);

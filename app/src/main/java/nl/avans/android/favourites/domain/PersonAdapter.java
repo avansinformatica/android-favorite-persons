@@ -93,7 +93,7 @@ public class PersonAdapter extends BaseAdapter {
         // En nu de viewHolder vullen met de juiste person
         final Person person = (Person) mPersonArrayList.get(position);
 
-        viewHolder.fullName.setText(person.getFirst() + " " + person.getLast());
+        viewHolder.fullName.setText(person.getFirstName() + " " + person.getLastName());
         viewHolder.emailAddress.setText(person.getEmailAddress());
         new ImageLoader(viewHolder.imageView).execute(person.getImageUrl());
 

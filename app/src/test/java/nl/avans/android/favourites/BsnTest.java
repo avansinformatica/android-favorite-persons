@@ -1,15 +1,15 @@
 package nl.avans.android.favourites;
 
 import org.junit.Test;
-
 import nl.avans.android.favourites.domain.BSN;
-
 import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by Robin Schellius on 24-3-2017.
+ * Deze class bevat testcases om de BSN class te testen. Dit is een voorbeeld van hoe
+ * je in Android testcases kunt maken en integreren in je project.
  *
+ * Over de tests in dit package:
  * These are tests that run on your machine's local Java Virtual Machine (JVM).
  * Use these tests to minimize execution time when your tests have no Android
  * framework dependencies or when you can mock the Android framework dependencies.
@@ -63,7 +63,7 @@ public class BsnTest {
             // Als we hier komen is het aanmaken gelukt - en dat zou niet moeten kunnen.
             fail();
         } catch (Exception e) {
-            // Als we hier komen is de test gelukt, want bij een lege BSN krijgen we een Exception.
+            // Als we hier komen is de test gelukt, want bij een foutieve BSN krijgen we een Exception.
             // We checken hier of de message van die exception is zoals we verwachten.
             assertEquals(BSN.ERR_INVALID_BSN, e.getMessage());
         }
@@ -78,7 +78,7 @@ public class BsnTest {
             // Als we hier komen is het aanmaken gelukt - en dat zou niet moeten kunnen.
             fail();
         } catch (Exception e) {
-            // Als we hier komen is de test gelukt, want bij een lege BSN krijgen we een Exception.
+            // Als we hier komen is de test gelukt, want bij een foutieve BSN krijgen we een Exception.
             // We checken hier of de message van die exception is zoals we verwachten.
             assertEquals(BSN.ERR_INVALID_BSN, e.getMessage());
         }
@@ -93,7 +93,7 @@ public class BsnTest {
             // Als we hier komen is het aanmaken gelukt - en dat zou niet moeten kunnen.
             fail();
         } catch (Exception e) {
-            // Als we hier komen is de test gelukt, want bij een lege BSN krijgen we een Exception.
+            // Als we hier komen is de test gelukt, want bij een foutieve BSN krijgen we een Exception.
             // We checken hier of de message van die exception is zoals we verwachten.
             assertEquals(BSN.ERR_INVALID_BSN, e.getMessage());
         }
@@ -107,7 +107,9 @@ public class BsnTest {
         try {
             // valide BSN - zie http://www.testnummers.nl/.
             bsn = new BSN(validNr);
+            // Check of de BSN waarde overeenkomt met wat we invoerden.
             assertEquals(validNr, bsn.getBsn());
+            // Als we hier komen is de test gelukt.
         } catch (Exception e) {
             // Als we hier komen is de test mislukt.
             fail();

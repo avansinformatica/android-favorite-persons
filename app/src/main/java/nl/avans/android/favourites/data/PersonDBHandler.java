@@ -86,8 +86,8 @@ public class PersonDBHandler extends SQLiteOpenHelper {
         Log.i(TAG, "addPerson " + person);
 
         ContentValues values = new ContentValues();
-        values.put(COLUMN_FIRSTNAME, person.getFirst());
-        values.put(COLUMN_LASTNAME, person.getLast());
+        values.put(COLUMN_FIRSTNAME, person.getFirstName());
+        values.put(COLUMN_LASTNAME, person.getLastName());
         values.put(COLUMN_IMAGEURL, person.getImageUrl());
         values.put(COLUMN_IS_FAVORITE, person.isFavorite());
 
@@ -109,7 +109,7 @@ public class PersonDBHandler extends SQLiteOpenHelper {
         // Hier moet je zeker weten dat je de juiste person verwijdert.
         return db.delete(DB_TABLE_NAME,
                 COLUMN_FIRSTNAME + " = ? ",
-                new String[] { person.getFirst() });
+                new String[] { person.getFirstName() });
     }
 
     /**
@@ -133,8 +133,8 @@ public class PersonDBHandler extends SQLiteOpenHelper {
 
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             Person person = new Person();
-            person.setFirst(cursor.getString(cursor.getColumnIndex(COLUMN_FIRSTNAME)));
-            person.setLast(cursor.getString(cursor.getColumnIndex(COLUMN_LASTNAME)));
+            person.setFirstName(cursor.getString(cursor.getColumnIndex(COLUMN_FIRSTNAME)));
+            person.setLastName(cursor.getString(cursor.getColumnIndex(COLUMN_LASTNAME)));
             person.setImageUrl(cursor.getString(cursor.getColumnIndex(COLUMN_IMAGEURL)));
 
             int isFavorite = cursor.getInt(cursor.getColumnIndex(COLUMN_IS_FAVORITE));
@@ -154,30 +154,40 @@ public class PersonDBHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Zoeken op voornaam.
+     * Zoeken op voornaam. Deze methode retourneert alleen de eerst gevonden persoon.
+     * We vinden dus niet alle personen met dezelfde voornaam... (mag je zelf maken)
      *
-     * @param firstName
+     * @param firstName Voornaam van persoon die we zoeken
+     * @return 1 gevonden persoon.
      */
-    public void getPersonByFirstName(String firstName) {
+    public Person getPersonByFirstName(String firstName) {
         Log.i(TAG, "getPersonByFirstName " + firstName);
 
         String query = "SELECT * FROM " + DB_TABLE_NAME + " WHERE " +
                 COLUMN_FIRSTNAME + "=" + "\"" + firstName + "\"";
         Log.i(TAG, "Query: " + query);
 
-        SQLiteDatabase db = this.getWritableDatabase();
-
+        Person person = null;
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToFirst()) {
+            person = new Person();
+            person.setFirstName(cursor.getString(cursor.getColumnIndex(COLUMN_FIRSTNAME)));
+            person.setLastName(cursor.getString(cursor.getColumnIndex(COLUMN_LASTNAME)));
+            person.setImageUrl(cursor.getString(cursor.getColumnIndex(COLUMN_IMAGEURL)));
 
-        cursor.moveToFirst();
-        while(cursor.moveToNext() ) {
-            Log.i(TAG, cursor.getString(cursor.getColumnIndex(COLUMN_FIRSTNAME)));
-            Log.i(TAG, cursor.getString(cursor.getColumnIndex(COLUMN_LASTNAME)));
-            Log.i(TAG, cursor.getString(cursor.getColumnIndex(COLUMN_IMAGEURL)));
-            Log.i(TAG, "--------------------------------------------");
+            int isFavorite = cursor.getInt(cursor.getColumnIndex(COLUMN_IS_FAVORITE));
+            if(0 == isFavorite){
+                person.setFavorite(false);
+            } else {
+                person.setFavorite(true);
+            }
+            Log.i(TAG, "Found " + person);
+        } else {
+            Log.e(TAG, "Error: person " + firstName + " not found");
         }
-
         db.close();
+        return person;
     }
 
 }
