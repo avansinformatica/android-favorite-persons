@@ -1,8 +1,15 @@
 <resources>
     <string name="app_name">Favorite Persons</string>
+    <string name="title_activity_favorites">My favorites</string>
+
+    <!-- Action menu -->
     <string name="action_favorites">Favorites</string>
     <string name="action_favorites_gridview">Favorites GridView</string>
     <string name="action_add_person">Add</string>
-    <string name="toast_person_deleted">Persoon verwijderd</string>
-    <string name="title_activity_favorites">My favorites</string>
+
+    <!-- Toasts-->
+    <string name="toast_person_added">Persoon toegevoegd aan favorieten</string>
+    <string name="toast_person_added_error">Fout! Persoon kon niet toegevoegd worden!</string>
+    <string name="toast_person_deleted">Persoon verwijderd uit favorieten</string>
+    <string name="toast_person_deleted_error">Fout! Persoon kon niet verwijderd worden!</string>
 </resources>

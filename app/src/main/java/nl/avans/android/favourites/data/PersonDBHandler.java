@@ -80,8 +80,9 @@ public class PersonDBHandler extends SQLiteOpenHelper {
      * Voeg een pesoon toe aan de database.
      *
      * @param person
+     * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
-    public void addPerson(Person person) {
+    public Long addPerson(Person person) {
         Log.i(TAG, "addPerson " + person);
 
         ContentValues values = new ContentValues();
@@ -91,17 +92,16 @@ public class PersonDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_IS_FAVORITE, person.isFavorite());
 
         SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(DB_TABLE_NAME, null, values);
-        db.close();
+        return db.insert(DB_TABLE_NAME, null, values);
     }
 
     /**
      * Verwijder de gegeven persoon
      *
      * @param person
-     * @return
+     * @return Het aantal verwijderde rows, of 0 als niets verwijderd is.
      */
-    public Integer deleteUser(Person person) {
+    public Integer deletePerson(Person person) {
         Log.i(TAG, "deletePerson " + person);
 
         SQLiteDatabase db = this.getWritableDatabase();

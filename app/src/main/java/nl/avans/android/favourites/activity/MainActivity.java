@@ -18,12 +18,16 @@ import nl.avans.android.favourites.R;
 import nl.avans.android.favourites.api.RandomUserTask;
 import nl.avans.android.favourites.domain.Person;
 
-public class MainActivity extends AppCompatActivity implements RandomUserTask.OnRandomUserAvailable,
-        View.OnClickListener {
+import static android.R.attr.data;
+
+public class MainActivity extends AppCompatActivity
+        implements RandomUserTask.OnRandomUserAvailable {
 
     // TAG for Log.i(...)
-    private static final String TAG = "MainActivity";
+    private final String TAG = getClass().getSimpleName();
     private static final String API_URL = "https://randomuser.me/api/";
+    // Label voor het saven van lijst van persons tussen schermen (Extras)
+    private final String EXTRAS_PERSONS = "persons";
 
     private Button addOnePersonBtn = null;
     private ListView personsListView = null;
@@ -32,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements RandomUserTask.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -45,9 +50,6 @@ public class MainActivity extends AppCompatActivity implements RandomUserTask.On
                 getLayoutInflater(),
                 persons);
         personsListView.setAdapter(personAdapter);
-
-//        addOnePersonBtn = (Button) findViewById(R.id.addPersonButton);
-//        addOnePersonBtn.setOnClickListener(this);
     }
 
     /**
@@ -56,10 +58,43 @@ public class MainActivity extends AppCompatActivity implements RandomUserTask.On
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-        Log.i(TAG, "onResume - we zijn terug in de " + TAG);
-        personAdapter.notifyDataSetChanged();
+        Log.i(TAG, "onResume");
+
+//        Bundle savedInstance = getIntent().getExtras();
+//        if (savedInstance != null) {
+//            Log.i(TAG, "savedInstance is niet null");
+//            persons = (ArrayList<Person>) savedInstance.getSerializable(EXTRAS_PERSONS);
+//            if(persons != null) {
+//                Log.i(TAG, "persons.size = " + persons.size());
+//                personsListView = (ListView) findViewById(R.id.personslistView);
+//                personAdapter = new PersonAdapter(getApplicationContext(),
+//                        getLayoutInflater(),
+//                        persons);
+//                personsListView.setAdapter(personAdapter);
+//            }
+//        }
     }
 
+    /**
+     * onStop wordt aangeroepen wanneer je vanuit de huidige activitiy naar een andere
+     * activity gaat.
+     */
+    @Override
+    protected void onStop() {
+        // call the superclass method first
+        Log.i(TAG, "onStop");
+        super.onStop();
+//        Bundle savedInstance = new Bundle();
+//        savedInstance.putSerializable(EXTRAS_PERSONS, persons);
+//        getIntent().putExtras(savedInstance);
+    }
+
+    /**
+     * Deze methode toont het optionsmenu in de ActionBar.
+     *
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -67,37 +102,36 @@ public class MainActivity extends AppCompatActivity implements RandomUserTask.On
         return true;
     }
 
+    /**
+     * Handelt een click op een item in het options menu af.
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        Intent intent;
 
-        if (id == R.id.action_favorites) {
-            Intent intent = new Intent(getApplicationContext(), FavoritesActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.action_favorites_gridview) {
-            Intent intent = new Intent(getApplicationContext(), FavoritesGridViewActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.actionAddPerson) {
-            RandomUserTask getRandomUser = new RandomUserTask(this);
-            String[] urls = new String[] { API_URL };
-            getRandomUser.execute(urls);
+        switch (id){
+            case R.id.action_favorites:
+                intent = new Intent(getApplicationContext(), FavoritesActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.action_favorites_gridview:
+                intent = new Intent(getApplicationContext(), FavoritesGridViewActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.actionAddPerson:
+                RandomUserTask getRandomUser = new RandomUserTask(this);
+                String[] urls = new String[] { API_URL };
+                getRandomUser.execute(urls);
+                break;
         }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onClick(View v) {
-        Log.i(TAG, "onClick(...)");
-        // Connect and pass self for callback
-        RandomUserTask getRandomUser = new RandomUserTask(this);
-        String[] urls = new String[] { API_URL };
-        getRandomUser.execute(urls);
     }
 
     /**
@@ -108,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements RandomUserTask.On
      */
     @Override
     public void onRandomUserAvailable(Person person) {
-        // Opslaag in array of mss wel in db?
         persons.add(person);
         Log.i(TAG, "Person added (" + person.toString() + ")");
         personAdapter.notifyDataSetChanged();

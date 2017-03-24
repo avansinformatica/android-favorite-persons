@@ -61,7 +61,7 @@ public class PersonAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
 
         Log.i(TAG, "getView " + position);
 
@@ -103,21 +103,40 @@ public class PersonAdapter extends BaseAdapter {
             viewHolder.imageCheckbox.setImageResource(R.drawable.ic_check_box_outline_blank_black_24dp);
         }
 
+        // Handel het selecteren/deselecteren af
+        // Deze PersonAdapter wordt in meerdere ListViews gebruikt: in de lijst met nieuw
+        // toegevoegde personen, en in de lijst met Favorites.
         viewHolder.imageCheckbox.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                // verander isFavorite: true wordt false, false wordt true
+                // Verander isFavorite: true wordt false, false wordt true
                 person.setFavorite(!person.isFavorite());
                 if(person.isFavorite()) {
-                    personDBHandler.addPerson(person);
-                    // Zet de juiste checkbox image
-                    viewHolder.imageCheckbox.setImageResource(R.drawable.ic_check_box_black_24dp);
+                    // addPerson geeft de rowID van de person in de database terug, of -1 bij error.
+                    if(personDBHandler.addPerson(person) > -1) {
+                        // Zet de juiste checkbox image
+                        viewHolder.imageCheckbox.setImageResource(R.drawable.ic_check_box_black_24dp);
+                        // Laat een bericht zien dat het toevoegen gelukt is
+                        Toast.makeText(mContext, R.string.toast_person_added, Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Het toevoegen is niet gelukt!
+                        Toast.makeText(mContext, R.string.toast_person_added_error, Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    personDBHandler.deleteUser(person);
-                    // Zet de juiste checkbox image
-                    viewHolder.imageCheckbox.setImageResource(R.drawable.ic_check_box_outline_blank_black_24dp);
-                    // Laat een bericht zien dat het verwijderen gelukt is
-                    Toast.makeText(mContext, R.string.toast_person_deleted, Toast.LENGTH_SHORT).show();
+                    if(personDBHandler.deletePerson(person) == 1) {
+                        // Zet de juiste checkbox image
+                        viewHolder.imageCheckbox.setImageResource(R.drawable.ic_check_box_outline_blank_black_24dp);
+                        // Als we in de Favorites lijst zitten verwijderen we deze persoon
+                        // ook uit de lijst.
+                        if (parent.getId() == R.id.favoritesListView)
+                            mPersonArrayList.remove(position);
+                            notifyDataSetChanged();
+                        // Laat een bericht zien dat het verwijderen gelukt is
+                        Toast.makeText(mContext, R.string.toast_person_deleted, Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Het verwijderen is niet gelukt!
+                        Toast.makeText(mContext, R.string.toast_person_deleted_error, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -127,9 +146,7 @@ public class PersonAdapter extends BaseAdapter {
     // Holds all data to the view. Wordt evt. gerecycled door Android
     private static class ViewHolder {
         public ImageView imageView;
-        // toegevoegd
         public ImageView imageCheckbox;
-
         public TextView fullName;
         public TextView emailAddress;
         public Button addToFavoritesBtn;

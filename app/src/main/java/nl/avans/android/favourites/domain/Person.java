@@ -1,9 +1,11 @@
 package nl.avans.android.favourites.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by dkroeske on 9/16/15.
  */
-public class Person {
+public class Person implements Serializable {
 
     private String imageUrl;
     private String title;
