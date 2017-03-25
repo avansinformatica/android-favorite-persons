@@ -39,6 +39,7 @@ public class PersonDBHandlerTest {
     private final String PERSON_FIRSTNAME = "FirstName";
     private final String PERSON_LASTNAME = "LastName";
     private final String PERSON_EMAIL = "test@test.com";
+    private final boolean PERSON_IS_FAVORITE = true;
 
     @Before
     public void setUp() throws Exception {
@@ -79,7 +80,8 @@ public class PersonDBHandlerTest {
         // Voeg een persoon toe, zodat we die hierna kunnen verwijderen.
         personDBHandler.addPerson(testPerson);
 
-        int errorResult = 0, expectedResult = 1;
+        int errorResult = 0,        // geen records deleted
+            expectedResult = 1;     // precies 1 record deleted
         int actualResult = personDBHandler.deletePerson(testPerson);
 
         assertNotEquals(errorResult, actualResult);
@@ -102,9 +104,11 @@ public class PersonDBHandlerTest {
 
         // Vervolgens persoon opzoeken in database
         Person result = personDBHandler.getPersonByFirstName(PERSON_FIRSTNAME);
-        Log.i("Test", "naam = " + result.getFirstName());
-//        assertEquals(PERSON_FIRSTNAME, result.getFirstName());
-
+        assertEquals(PERSON_FIRSTNAME, result.getFirstName());
+        assertEquals(PERSON_LASTNAME, result.getLastName());
+        // Email werkt nog niet - mag je zelf repareren :-)
+//        assertEquals(PERSON_EMAIL, result.getEmailAddress());
+        assertEquals(PERSON_IS_FAVORITE, result.isFavorite());
     }
 
 }

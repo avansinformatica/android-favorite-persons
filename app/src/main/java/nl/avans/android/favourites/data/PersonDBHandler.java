@@ -164,7 +164,7 @@ public class PersonDBHandler extends SQLiteOpenHelper {
         Log.i(TAG, "getPersonByFirstName " + firstName);
 
         String query = "SELECT * FROM " + DB_TABLE_NAME + " WHERE " +
-                COLUMN_FIRSTNAME + "=" + "\"" + firstName + "\"";
+                COLUMN_FIRSTNAME + "=" + "'" + firstName + "'";
         Log.i(TAG, "Query: " + query);
 
         Person person = null;
@@ -175,7 +175,7 @@ public class PersonDBHandler extends SQLiteOpenHelper {
             person.setFirstName(cursor.getString(cursor.getColumnIndex(COLUMN_FIRSTNAME)));
             person.setLastName(cursor.getString(cursor.getColumnIndex(COLUMN_LASTNAME)));
             person.setImageUrl(cursor.getString(cursor.getColumnIndex(COLUMN_IMAGEURL)));
-
+            // person.setEmailAddress(cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL)));
             int isFavorite = cursor.getInt(cursor.getColumnIndex(COLUMN_IS_FAVORITE));
             if(0 == isFavorite){
                 person.setFavorite(false);
