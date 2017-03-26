@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity
     private final String TAG = getClass().getSimpleName();
     private static final String API_URL = "https://randomuser.me/api/";
     // Label voor het saven van lijst van persons tussen schermen (Extras)
-    private final String EXTRAS_PERSONS = "persons";
+    private final String TAG_SAVED_PERSONS = "persons";
 
     private Button addOnePersonBtn = null;
     private ListView personsListView = null;
@@ -53,40 +53,44 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * onResume wordt aangeroepen als je vanuit een andere activity hier terugkeert.
+     * Als je je device kantelt wordt de activity opnieuw opgebouwd en ben je je data kwijt.
+     * Met deze methode kun je je data ondertussen bewaren.
+     *
+     * @param outState
      */
     @Override
-    public void onResume() {
-        super.onResume();  // Always call the superclass method first
-        Log.i(TAG, "onResume");
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.i(TAG, "onSaveInstanceState");
+        super.onSaveInstanceState(outState);
 
-//        Bundle savedInstance = getIntent().getExtras();
-//        if (savedInstance != null) {
-//            Log.i(TAG, "savedInstance is niet null");
-//            persons = (ArrayList<Person>) savedInstance.getSerializable(EXTRAS_PERSONS);
-//            if(persons != null) {
-//                Log.i(TAG, "persons.size = " + persons.size());
-//                personsListView = (ListView) findViewById(R.id.personslistView);
-//                personAdapter = new PersonAdapter(getApplicationContext(),
-//                        getLayoutInflater(),
-//                        persons);
-//                personsListView.setAdapter(personAdapter);
-//            }
-//        }
+        // construct a list of books you've favorited
+        final ArrayList<Person> personList = new ArrayList<>();
+        for (Person person: persons) {
+                personList.add(person);
+        }
+
+        // save that list to outState for later
+        outState.putSerializable(TAG_SAVED_PERSONS, personList);
     }
 
     /**
-     * onStop wordt aangeroepen wanneer je vanuit de huidige activitiy naar een andere
-     * activity gaat.
+     * Als de activity opnieuw wordt opgebouwd en er is bewaarde data,
+     * herlaad die dan hier.
+     *
+     * @param savedInstanceState
      */
     @Override
-    protected void onStop() {
-        // call the superclass method first
-        Log.i(TAG, "onStop");
-        super.onStop();
-//        Bundle savedInstance = new Bundle();
-//        savedInstance.putSerializable(EXTRAS_PERSONS, persons);
-//        getIntent().putExtras(savedInstance);
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.i(TAG, "onRestoreInstanceState");
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // get our previously saved list of persons
+        final ArrayList<Person> personList = (ArrayList<Person>) savedInstanceState.getSerializable(TAG_SAVED_PERSONS);
+
+        // look at all of your books and figure out which are the favorites
+        for (Person person: personList) {
+            persons.add(person);
+        }
     }
 
     /**

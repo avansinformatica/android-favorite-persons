@@ -2,13 +2,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".activity.MainActivity">
 
+    <item
+        android:id="@+id/action_favorites"
+        android:title="@string/action_favorites"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
     <!-- We tonen één knop op de toolbar, waarmee de gebruiker
         kan switchen tussen ListView en GridView. In de code
         van FavoritesActivity handelen we de actie af. -->
     <item
         android:id="@+id/action_toggle_favorites_view"
-        android:title=""
-        android:orderInCategory="100"
-        app:showAsAction="always" />
+        android:icon="@drawable/ic_view_module_black_24dp"
+        android:title="Switch"
+        app:showAsAction="ifRoom" />
 
 </menu>

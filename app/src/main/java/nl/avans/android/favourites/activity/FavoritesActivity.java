@@ -1,6 +1,5 @@
 package nl.avans.android.favourites.activity;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,20 +7,27 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import java.util.ArrayList;
-
-import nl.avans.android.favourites.api.RandomUserTask;
-import nl.avans.android.favourites.domain.PersonAdapter;
-import nl.avans.android.favourites.data.PersonDBHandler;
 import nl.avans.android.favourites.R;
-import nl.avans.android.favourites.domain.Person;
 
 public class FavoritesActivity extends AppCompatActivity {
 
     // TAG for Log.i(...)
     private final String TAG = this.getClass().getSimpleName();
+    // Het switcherIcon dat LisView/GridView toont
+    private ImageView switcherIcon;
+    private ListView favoritesListView;
+    private GridView favoritesGridView;
+
+    // De mogelijke viewmodes
+    private enum VIEWMODE { GRIDVIEW, LISTVIEW };
+    // Dit is de initiële viewmode.
+    private VIEWMODE viewMode = VIEWMODE.LISTVIEW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,21 +65,38 @@ public class FavoritesActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Log.i(TAG, "onOptionsItemSelected");
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch (id){
             case R.id.action_toggle_favorites_view:
-                //
-                // Vervang hier de ene favorites view door de andere (ListView vs. GridView)
-                //
+                Log.i(TAG, "switcher clicked");
 
-                // En switch het icon
-                
-                break;
+                // Inflate UI and set listeners and adapters and ...
+                favoritesListView = (ListView) findViewById(R.id.favoritesListView);
+                favoritesGridView = (GridView) findViewById(R.id.favoritesGridView);
+
+                // Hier switchen we tussen ListView en GridView
+                if(viewMode == VIEWMODE.LISTVIEW) {
+                    viewMode = VIEWMODE.GRIDVIEW;
+                    favoritesListView.setVisibility(View.GONE);
+                    favoritesGridView.setVisibility(View.VISIBLE);
+                    item.setIcon(R.drawable.ic_view_list_black_24dp);
+                } else {
+                    viewMode = VIEWMODE.LISTVIEW;
+                    favoritesListView.setVisibility(View.VISIBLE);
+                    favoritesGridView.setVisibility(View.GONE);
+                    item.setIcon(R.drawable.ic_view_module_black_24dp);
+                }
+                // Actie afgehandeld, wij zijn klaar.
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
 }

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class FavoritesListViewFragment extends Fragment {
     private final String TAG = this.getClass().getSimpleName();
 
     private ListView favoritesListView;
+    private GridView favoritesGridView;
     private ArrayList<Person> favoritePersons = new ArrayList<Person>();
     private PersonAdapter personAdapter;
     private PersonDBHandler personDBHandler;
@@ -40,6 +42,7 @@ public class FavoritesListViewFragment extends Fragment {
      */
     public static FavoritesListViewFragment newInstance(String param1, String param2) {
         FavoritesListViewFragment fragment = new FavoritesListViewFragment();
+        // Als je data mee wilt sturen naar het fragment kan dat hier
 //        Bundle args = new Bundle();
 //        args.putString(ARG_PARAM1, param1);
 //        args.putString(ARG_PARAM2, param2);
@@ -47,14 +50,16 @@ public class FavoritesListViewFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Hier initialiseren we de data in het fragment.
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate");
 
-        //
-        // Hier kun je data initialiseren
-        //
         // Maak een koppeling naar de database
         personDBHandler = new PersonDBHandler(getContext());
         // Alle personen in de database zijn favorites, dus we hoeven niet
@@ -72,9 +77,19 @@ public class FavoritesListViewFragment extends Fragment {
 
         // Inflate UI and set listeners and adapters and ...
         favoritesListView = (ListView) view.findViewById(R.id.favoritesListView);
-        personAdapter = new PersonAdapter(getContext(),
-                favoritePersons);
+
+        favoritesGridView = (GridView) view.findViewById(R.id.favoritesGridView);
+
+        personAdapter = new PersonAdapter(getContext(), favoritePersons);
+
         favoritesListView.setAdapter(personAdapter);
+        favoritesGridView.setAdapter(personAdapter);
+
+        favoritesGridView.setNumColumns(2);
+        favoritesGridView.setPadding(5, 5, 5, 5);
+
+        favoritesListView.setVisibility(View.VISIBLE);
+        favoritesGridView.setVisibility(View.GONE);
 
         return view;
     }
