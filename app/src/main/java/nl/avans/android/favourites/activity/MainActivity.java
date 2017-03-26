@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
         // Inflate UI and set listeners and adapters and ...
         personsListView = (ListView) findViewById(R.id.personslistView);
         personAdapter = new PersonAdapter(getApplicationContext(),
-                getLayoutInflater(),
+                // getLayoutInflater(),
                 persons);
         personsListView.setAdapter(personAdapter);
     }
@@ -120,10 +120,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_favorites:
                 intent = new Intent(getApplicationContext(), FavoritesActivity.class);
                 startActivity(intent);
-                break;
-            case R.id.action_favorites_gridview:
-//                intent = new Intent(getApplicationContext(), FavoritesGridViewActivity.class);
-//                startActivity(intent);
                 break;
             case R.id.actionAddPerson:
                 RandomUserTask getRandomUser = new RandomUserTask(this);

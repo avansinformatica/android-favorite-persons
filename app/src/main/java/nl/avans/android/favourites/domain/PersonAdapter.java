@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,47 +18,34 @@ import android.widget.Toast;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import nl.avans.android.favourites.api.ImageLoader;
 import nl.avans.android.favourites.data.PersonDBHandler;
 import nl.avans.android.favourites.R;
 
 /**
  * Created by dkroeske on 9/16/15.
  */
-public class PersonAdapter extends BaseAdapter {
+public class PersonAdapter extends ArrayAdapter<Person> {
 
     // TAG for Log.i(...)
     private static final String TAG = PersonAdapter.class.getSimpleName();
 
     private Context mContext;
-    private LayoutInflater mInflator;
     private ArrayList mPersonArrayList;
-
     private PersonDBHandler personDBHandler;
 
-    public PersonAdapter(Context context, LayoutInflater layoutInflater, ArrayList<Person> personArrayList)
+    /**
+     * Constructor gebruikt vanuit Fragments.
+     *
+     * @param context
+     * @param personArrayList
+     */
+    public PersonAdapter(Context context, ArrayList<Person> personArrayList)
     {
+        super(context, 0, personArrayList);
         mContext = context;
-        mInflator = layoutInflater;
         mPersonArrayList = personArrayList;
         personDBHandler = new PersonDBHandler(context);
-    }
-
-    @Override
-    public int getCount() {
-        int size = mPersonArrayList.size();
-        // Log.i("getCount()", "=" + size);
-        return size;
-    }
-
-    @Override
-    public Object getItem(int position) {
-        Log.i(TAG, "getItem " + position);
-        return mPersonArrayList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
     }
 
     @Override
@@ -75,7 +63,10 @@ public class PersonAdapter extends BaseAdapter {
         if(convertView == null) {
 
             // Als convertView nog niet bestaat maken we een nieuwe aan.
-            convertView = mInflator.inflate(R.layout.person_listview_row, null);
+            // convertView = mInflator.inflate(R.layout.person_listview_row, null);
+            // Let op: bij Fragments gebruik je deze variant, omdat je het scherm vanuit de context van
+            // het Fragment wilt opbouwen.
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.person_listview_row, null);
 
             viewHolder = new ViewHolder();
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.personRowImageView);
@@ -151,35 +142,4 @@ public class PersonAdapter extends BaseAdapter {
         public TextView emailAddress;
         public Button addToFavoritesBtn;
     }
-
-
-    /**
-     * Interne asynchrone class om afbeeldingen te laden.
-     */
-    private class ImageLoader extends AsyncTask<String, Void, Bitmap> {
-        ImageView imageView;
-
-        public ImageLoader(ImageView imageView) {
-            this.imageView = imageView;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String imageURL = urls[0];
-            Bitmap bitmap = null;
-            try {
-                InputStream in = new java.net.URL(imageURL).openStream();
-                bitmap = BitmapFactory.decodeStream(in);
-
-            } catch (Exception e) {
-                Log.e("Error Message", e.getMessage());
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            imageView.setImageBitmap(result);
-        }
-    }
-
 }
