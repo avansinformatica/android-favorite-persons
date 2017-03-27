@@ -25,7 +25,7 @@ public class FavoritesActivity extends AppCompatActivity {
     private GridView favoritesGridView;
 
     // De mogelijke viewmodes
-    private enum VIEWMODE { GRIDVIEW, LISTVIEW };
+    public static enum VIEWMODE { GRIDVIEW, LISTVIEW };
     // Dit is de initiële viewmode.
     private VIEWMODE viewMode = VIEWMODE.LISTVIEW;
 

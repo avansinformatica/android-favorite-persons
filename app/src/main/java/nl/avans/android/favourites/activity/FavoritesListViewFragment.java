@@ -2,9 +2,6 @@ package nl.avans.android.favourites.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +24,7 @@ public class FavoritesListViewFragment extends Fragment {
     private ListView favoritesListView;
     private GridView favoritesGridView;
     private ArrayList<Person> favoritePersons = new ArrayList<Person>();
-    private PersonAdapter personAdapter;
+    private PersonAdapter personListViewAdapter, personGridViewAdapter;
     private PersonDBHandler personDBHandler;
 
     // Verplichte empty constructor
@@ -77,13 +74,13 @@ public class FavoritesListViewFragment extends Fragment {
 
         // Inflate UI and set listeners and adapters and ...
         favoritesListView = (ListView) view.findViewById(R.id.favoritesListView);
-
         favoritesGridView = (GridView) view.findViewById(R.id.favoritesGridView);
 
-        personAdapter = new PersonAdapter(getContext(), favoritePersons);
+        personListViewAdapter = new PersonAdapter(getContext(), favoritePersons, FavoritesActivity.VIEWMODE.LISTVIEW);
+        personGridViewAdapter = new PersonAdapter(getContext(), favoritePersons, FavoritesActivity.VIEWMODE.GRIDVIEW);
 
-        favoritesListView.setAdapter(personAdapter);
-        favoritesGridView.setAdapter(personAdapter);
+        favoritesListView.setAdapter(personListViewAdapter);
+        favoritesGridView.setAdapter(personGridViewAdapter);
 
         favoritesGridView.setNumColumns(2);
         favoritesGridView.setPadding(5, 5, 5, 5);

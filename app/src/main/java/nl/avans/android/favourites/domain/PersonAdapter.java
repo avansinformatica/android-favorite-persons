@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import nl.avans.android.favourites.activity.FavoritesActivity;
 import nl.avans.android.favourites.api.ImageLoader;
 import nl.avans.android.favourites.data.PersonDBHandler;
 import nl.avans.android.favourites.R;
@@ -34,6 +35,8 @@ public class PersonAdapter extends ArrayAdapter<Person> {
     private ArrayList mPersonArrayList;
     private PersonDBHandler personDBHandler;
 
+    private FavoritesActivity.VIEWMODE VIEWMODE = FavoritesActivity.VIEWMODE.LISTVIEW;
+
     /**
      * Constructor gebruikt vanuit Fragments.
      *
@@ -46,6 +49,21 @@ public class PersonAdapter extends ArrayAdapter<Person> {
         mContext = context;
         mPersonArrayList = personArrayList;
         personDBHandler = new PersonDBHandler(context);
+    }
+
+    /**
+     * Constructor gebruikt vanuit Fragments.
+     *
+     * @param context
+     * @param personArrayList
+     */
+    public PersonAdapter(Context context, ArrayList<Person> personArrayList, FavoritesActivity.VIEWMODE viewmode)
+    {
+        super(context, 0, personArrayList);
+        mContext = context;
+        mPersonArrayList = personArrayList;
+        personDBHandler = new PersonDBHandler(context);
+        VIEWMODE = viewmode;
     }
 
     @Override
@@ -62,14 +80,20 @@ public class PersonAdapter extends ArrayAdapter<Person> {
         // this method can create a new view.
         if(convertView == null) {
 
+            viewHolder = new ViewHolder();
+
             // Als convertView nog niet bestaat maken we een nieuwe aan.
             // convertView = mInflator.inflate(R.layout.person_listview_row, null);
             // Let op: bij Fragments gebruik je deze variant, omdat je het scherm vanuit de context van
             // het Fragment wilt opbouwen.
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.person_listview_row, null);
-
-            viewHolder = new ViewHolder();
+            if(VIEWMODE == FavoritesActivity.VIEWMODE.LISTVIEW) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.person_listview_row, null);
+            } else {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.person_gridview_row, null);
+            }
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.personRowImageView);
+            // Zorg dat de afbeelding in GridView uitgerekt kan worden (moet groter plaatje zijn)
+            viewHolder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             viewHolder.fullName = (TextView) convertView.findViewById(R.id.personRowFullName);
             viewHolder.emailAddress = (TextView) convertView.findViewById(R.id.personRowEmailAddress);
             viewHolder.imageCheckbox = (ImageView) convertView.findViewById(R.id.imageCheckbox);
