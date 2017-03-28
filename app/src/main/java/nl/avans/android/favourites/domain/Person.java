@@ -7,6 +7,8 @@ import java.io.Serializable;
  */
 public class Person implements Serializable {
 
+    // ID uit database
+    private Long _id;
     private String imageUrl;
     private String title;
     private String firstName;
@@ -15,6 +17,14 @@ public class Person implements Serializable {
     private String emailAddress;
     private boolean isFavorite = false;
     private BSN bsn;
+
+    public Long getId() {
+        return _id;
+    }
+
+    public void setId(Long _id) {
+        this._id = _id;
+    }
 
     public boolean isFavorite() {
         return isFavorite;
@@ -74,7 +84,7 @@ public class Person implements Serializable {
 
     @Override
     public String toString() {
-        return title + " " + firstName + " " + lastName;
+        return title + " " + firstName + " " + lastName + " _id = " + _id;
     }
 
 

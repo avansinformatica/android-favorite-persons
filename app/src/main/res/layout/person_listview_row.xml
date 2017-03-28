@@ -23,6 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="John"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:id="@+id/personRowFullName"
             android:textSize="@dimen/abc_text_size_medium_material" />
 
@@ -30,6 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Doe"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:id="@+id/personRowEmailAddress"
             android:textSize="@dimen/abc_text_size_small_material" />
     </LinearLayout>

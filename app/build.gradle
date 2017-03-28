@@ -23,7 +23,7 @@ android {
             // All the usual Gradle options.
             testLogging {
                 events "passed", "skipped", "failed", "standardOut", "standardError"
-                outputs.upToDateWhen {false}
+                outputs.upToDateWhen { false }
                 showStandardStreams = true
             }
         }
@@ -37,5 +37,6 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:design:25.3.0'
     testCompile 'junit:junit:4.12'
 }

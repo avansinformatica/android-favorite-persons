@@ -1,22 +1,25 @@
-package nl.avans.android.favourites.activity;
+package nl.avans.android.favourites.activity.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
 import nl.avans.android.favourites.R;
+import nl.avans.android.favourites.activity.FavoritesActivity;
 import nl.avans.android.favourites.data.PersonDBHandler;
 import nl.avans.android.favourites.domain.Person;
 import nl.avans.android.favourites.domain.PersonAdapter;
 
-public class FavoritesListViewFragment extends Fragment {
+public class FavoritesListViewFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     // TAG for Log.i(...)
     private final String TAG = this.getClass().getSimpleName();
@@ -81,13 +84,20 @@ public class FavoritesListViewFragment extends Fragment {
 
         favoritesListView.setAdapter(personListViewAdapter);
         favoritesGridView.setAdapter(personGridViewAdapter);
-
         favoritesGridView.setNumColumns(2);
-        favoritesGridView.setPadding(5, 5, 5, 5);
+
+        favoritesListView.setOnItemClickListener(this);
+        favoritesGridView.setOnItemClickListener(this);
 
         favoritesListView.setVisibility(View.VISIBLE);
         favoritesGridView.setVisibility(View.GONE);
 
         return view;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent details = new Intent(getContext(), ScrollingActivity.class);
+        startActivity(details);
     }
 }

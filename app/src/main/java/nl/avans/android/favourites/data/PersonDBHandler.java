@@ -17,7 +17,7 @@ import nl.avans.android.favourites.domain.Person;
  */
 public class PersonDBHandler extends SQLiteOpenHelper {
 
-    private static final String TAG = "PersonDBHandler";
+    private final String TAG = getClass().getSimpleName();
 
     private static final int DB_VERSION = 1;
     private static final String DB_NAME = "person.db";
@@ -27,8 +27,8 @@ public class PersonDBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_ID = "_id";  // primary key, auto increment
     private static final String COLUMN_FIRSTNAME = "firstName";
     private static final String COLUMN_LASTNAME = "lastName";
+    private static final String COLUMN_EMAIL_ADDRESS = "emailadress";
     private static final String COLUMN_IMAGEURL = "imageUrl";
-
     private static final String COLUMN_IS_FAVORITE = "isFavorite";
 
     // Default constructor
@@ -53,6 +53,7 @@ public class PersonDBHandler extends SQLiteOpenHelper {
                 COLUMN_FIRSTNAME + " TEXT," +
                 COLUMN_LASTNAME + " TEXT," +
                 COLUMN_IMAGEURL + " TEXT," +
+                COLUMN_EMAIL_ADDRESS + " TEXT," +
                 COLUMN_IS_FAVORITE + " INTEGER" +
                 ")";
         db.execSQL(CREATE_PERSON_TABLE);
@@ -89,10 +90,18 @@ public class PersonDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_FIRSTNAME, person.getFirstName());
         values.put(COLUMN_LASTNAME, person.getLastName());
         values.put(COLUMN_IMAGEURL, person.getImageUrl());
+        values.put(COLUMN_EMAIL_ADDRESS, person.getEmailAddress());
         values.put(COLUMN_IS_FAVORITE, person.isFavorite());
 
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.insert(DB_TABLE_NAME, null, values);
+        Long _id = db.insert(DB_TABLE_NAME, null, values);
+        // Bewaar ID bij persoon; nodig bij zoeken of verwijderen.
+        person.setId(_id);
+
+        // check
+        getPersonByFirstName(person.getFirstName());
+
+        return _id;
     }
 
     /**
@@ -108,8 +117,8 @@ public class PersonDBHandler extends SQLiteOpenHelper {
 
         // Hier moet je zeker weten dat je de juiste person verwijdert.
         return db.delete(DB_TABLE_NAME,
-                COLUMN_FIRSTNAME + " = ? ",
-                new String[] { person.getFirstName() });
+                COLUMN_ID + " = ? ",
+                new String[] { person.getId().toString() });
     }
 
     /**
@@ -135,7 +144,10 @@ public class PersonDBHandler extends SQLiteOpenHelper {
             Person person = new Person();
             person.setFirstName(cursor.getString(cursor.getColumnIndex(COLUMN_FIRSTNAME)));
             person.setLastName(cursor.getString(cursor.getColumnIndex(COLUMN_LASTNAME)));
+            person.setEmailAddress(cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL_ADDRESS)));
             person.setImageUrl(cursor.getString(cursor.getColumnIndex(COLUMN_IMAGEURL)));
+            // person.setTitle(cursor.getString(cursor.getColumnIndex(COLUMN_TITLE)));
+            person.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
 
             int isFavorite = cursor.getInt(cursor.getColumnIndex(COLUMN_IS_FAVORITE));
             if(0 == isFavorite){
@@ -174,6 +186,7 @@ public class PersonDBHandler extends SQLiteOpenHelper {
             person = new Person();
             person.setFirstName(cursor.getString(cursor.getColumnIndex(COLUMN_FIRSTNAME)));
             person.setLastName(cursor.getString(cursor.getColumnIndex(COLUMN_LASTNAME)));
+            person.setEmailAddress(cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL_ADDRESS)));
             person.setImageUrl(cursor.getString(cursor.getColumnIndex(COLUMN_IMAGEURL)));
             // person.setEmailAddress(cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL)));
             int isFavorite = cursor.getInt(cursor.getColumnIndex(COLUMN_IS_FAVORITE));
@@ -189,5 +202,4 @@ public class PersonDBHandler extends SQLiteOpenHelper {
         db.close();
         return person;
     }
-
 }

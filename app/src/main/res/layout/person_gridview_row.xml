@@ -3,32 +3,43 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_blue_bright">
+    android:layout_marginBottom="5dp"
+    android:padding="2dp">
 
     <ImageView
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:id="@+id/personRowImageView"
-        android:layout_margin="10dp" />
+        android:background="@android:color/background_dark"
+        android:padding="2dp"
+        android:id="@+id/personRowImageView" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5dp">
+        android:paddingTop="10dp"
+        android:background="@android:color/background_dark">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/personRowFullName"
+            android:textStyle="bold"
+            android:padding="4dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/abc_text_size_medium_material" />
 
-        <!-- Deze wordt in GridView niet gebruikt -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:padding="4dp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:id="@+id/personRowEmailAddress"
-            android:textSize="@dimen/abc_text_size_small_material" />
+            android:textSize="12dp" />
 
     </LinearLayout>
 

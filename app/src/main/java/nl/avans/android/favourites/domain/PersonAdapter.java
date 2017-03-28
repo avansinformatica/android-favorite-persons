@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -109,7 +110,12 @@ public class PersonAdapter extends ArrayAdapter<Person> {
         final Person person = (Person) mPersonArrayList.get(position);
 
         viewHolder.fullName.setText(person.getFirstName() + " " + person.getLastName());
+        viewHolder.fullName.setAllCaps(true);
+
+        // EmailAddress, met elipses aan het einde als tekst te lang is
         viewHolder.emailAddress.setText(person.getEmailAddress());
+//        viewHolder.emailAddress.setEllipsize(TextUtils.TruncateAt.END);
+
         new ImageLoader(viewHolder.imageView).execute(person.getImageUrl());
 
         if (person.isFavorite()){

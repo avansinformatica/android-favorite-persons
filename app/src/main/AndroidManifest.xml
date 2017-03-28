@@ -29,6 +29,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="nl.avans.android.favourites.activity.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.fragments.ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>
