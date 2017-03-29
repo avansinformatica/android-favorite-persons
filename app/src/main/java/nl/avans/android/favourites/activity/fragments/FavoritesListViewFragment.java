@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import nl.avans.android.favourites.R;
 import nl.avans.android.favourites.activity.FavoritesActivity;
+import nl.avans.android.favourites.activity.ScrollingActivity;
 import nl.avans.android.favourites.data.PersonDBHandler;
 import nl.avans.android.favourites.domain.Person;
 import nl.avans.android.favourites.domain.PersonAdapter;
@@ -23,6 +24,7 @@ public class FavoritesListViewFragment extends Fragment implements AdapterView.O
 
     // TAG for Log.i(...)
     private final String TAG = this.getClass().getSimpleName();
+    public final static String PERSON_EXTRAS = "PERSON_EXTRAS";
 
     private ListView favoritesListView;
     private GridView favoritesGridView;
@@ -97,7 +99,8 @@ public class FavoritesListViewFragment extends Fragment implements AdapterView.O
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent details = new Intent(getContext(), ScrollingActivity.class);
-        startActivity(details);
+        Intent scrollingActivity = new Intent(getContext(), ScrollingActivity.class);
+        scrollingActivity.putExtra(PERSON_EXTRAS, favoritePersons.get(position));
+        startActivity(scrollingActivity);
     }
 }

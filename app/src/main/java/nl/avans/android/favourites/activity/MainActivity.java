@@ -7,33 +7,39 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
-
 import java.util.ArrayList;
-
+import nl.avans.android.favourites.api.RandomUsersTask;
 import nl.avans.android.favourites.domain.PersonAdapter;
 import nl.avans.android.favourites.R;
-import nl.avans.android.favourites.api.RandomUserTask;
 import nl.avans.android.favourites.domain.Person;
 
-import static android.R.attr.data;
-
 public class MainActivity extends AppCompatActivity
-        implements RandomUserTask.OnRandomUserAvailable {
+        implements RandomUsersTask.OnRandomUsersAvailable {
 
     // TAG for Log.i(...)
     private final String TAG = getClass().getSimpleName();
-    private static final String API_URL = "https://randomuser.me/api/";
-    // Label voor het saven van lijst van persons tussen schermen (Extras)
+
+    // Label voor het overdragen van lijst van persons tussen schermen (Extras)
     private final String TAG_SAVED_PERSONS = "persons";
 
-    private Button addOnePersonBtn = null;
+    // API URL waar we random personen ophalen
+    // We moeten hier zelf nog het aantal users achteraan toevoegen - doen we
+    // wanneer we de call uitvoeren.
+    private final static String strApiURL = "https://randomuser.me/api/?results=";
+
+    // Aantal personen dat we in één keer via de api ophalen.
+    private final int AANTAL_PERSONEN = 15;
+
     private ListView personsListView = null;
     private ArrayList<Person> persons = new ArrayList<Person>();
     private PersonAdapter personAdapter = null;
 
+    /**
+     * onCreate wordt aangeroepen telkens wanneer deze activity opnieuw actief wordt.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
@@ -44,11 +50,12 @@ public class MainActivity extends AppCompatActivity
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
+        RandomUsersTask randomUsersTask = new RandomUsersTask(this);
+        randomUsersTask.execute(strApiURL + AANTAL_PERSONEN);
+
         // Inflate UI and set listeners and adapters and ...
         personsListView = (ListView) findViewById(R.id.personslistView);
-        personAdapter = new PersonAdapter(getApplicationContext(),
-                // getLayoutInflater(),
-                persons);
+        personAdapter = new PersonAdapter(getApplicationContext(), persons);
         personsListView.setAdapter(personAdapter);
     }
 
@@ -120,16 +127,28 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         Intent intent;
 
+        // De parameters die we meesturen naar de RandomUsersTask.
+        String[] params;
+
+        // De Async task waarmee we users ophalen.
+        // We geven een referentie naar onszelf mee(this) als callback
+        RandomUsersTask randomUsersTask = new RandomUsersTask(this);
+
         switch (id){
             case R.id.action_favorites:
                 intent = new Intent(getApplicationContext(), FavoritesActivity.class);
                 startActivity(intent);
-                break;
-            case R.id.actionAddPerson:
-                RandomUserTask getRandomUser = new RandomUserTask(this);
-                String[] urls = new String[] { API_URL };
-                getRandomUser.execute(urls);
-                break;
+                return true;
+            case R.id.action_get_multiple_persons:
+                // We halen in een keer AANTAL_PERSONEN op.
+                params = new String[] { strApiURL + AANTAL_PERSONEN };
+                randomUsersTask.execute(params);
+                return true;
+            case R.id.action_get_one_person:
+                // We halen 1 persoon op en voegen die toe.
+                params = new String[] { strApiURL + "1" };
+                randomUsersTask.execute(params);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -138,12 +157,16 @@ public class MainActivity extends AppCompatActivity
      * Dit is de callback methode die door de RandomUserTask wordt aangeroepen
      * zodra er een random user opgehaald is.
      *
-     * @param person
+     * @param
      */
     @Override
-    public void onRandomUserAvailable(Person person) {
-        persons.add(person);
-        Log.i(TAG, "Person added (" + person.toString() + ")");
+    public void onUsersAvailable(ArrayList<Person> list) {
+        persons.clear();
+        // persons = (ArrayList<Person>) list.clone();   // Raar, maar dit werkt niet...
+        for(int i = 0; i < list.size(); i++) {
+            persons.add(list.get(i));
+        }
+        Log.i(TAG, persons.size() + " persons available");
         personAdapter.notifyDataSetChanged();
     }
 }
